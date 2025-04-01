@@ -11,11 +11,10 @@ from django.urls import reverse_lazy
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch
 from import_export.formats.base_formats import CSV
+from redbox_app.setting_enums import Classification, Environment
 from sentry_sdk.integrations.django import DjangoIntegration
 from storages.backends import s3boto3
 from yarl import URL
-
-from redbox_app.setting_enums import Classification, Environment
 
 logger = logging.getLogger(__name__)
 
@@ -307,7 +306,7 @@ DATABASES = {
         "USER": env.str("POSTGRES_USER"),
         "PASSWORD": env.str("POSTGRES_PASSWORD"),
         "HOST": env.str("POSTGRES_HOST"),
-        "PORT": "5432",
+        "PORT": env.str("POSTGRES_PORT"),
     }
 }
 

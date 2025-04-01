@@ -1,6 +1,6 @@
 {
   "image": "python:3.12-bookworm",
-  "postCreateCommand": "pip3 install poetry && apt update && apt install libgl-dev libmagic-dev docker-ce  -y && poetry install && chmod 777 data/elastic",
+  "postCreateCommand": "chmod +x .devcontainer/post-create.sh && .devcontainer/post-create.sh",
   "name": "redbox-dev",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
@@ -12,7 +12,9 @@
   },
   "runArgs": [
     "--network",
-    "host" // use host networking so that the dev container can access the API when running the container locally
+    "host", // use host networking so that the dev container can access the API when running the container locally
+    "--mount",
+    "type=bind,source=${localWorkspaceFolder}/data,target=/workspaces/redbox/data"
   ],
   "forwardPorts": [
     8501,

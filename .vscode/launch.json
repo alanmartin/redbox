@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Django Server",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/django_app/manage.py",
+            "args": [
+                "runserver",
+                "0.0.0.0:8090"
+            ],
+            "django": true,
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/django_app",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/django_app:${workspaceFolder}",
+                "DJANGO_SETTINGS_MODULE": "redbox_app.settings"
+            }
+        },
+        {
+            "name": "Django Q Worker",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/django_app/manage.py",
+            "args": [
+                "qcluster"
+            ],
+            "django": true,
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/django_app",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/django_app:${workspaceFolder}",
+                "DJANGO_SETTINGS_MODULE": "redbox_app.settings"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Django + Worker",
+            "configurations": ["Django Server", "Django Q Worker"]
+        }
+    ]
+} 
