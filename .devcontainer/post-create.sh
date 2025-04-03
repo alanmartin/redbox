@@ -32,3 +32,6 @@ if [ "$OS" = "darwin" ]; then
     echo "Running on macOS"
     # Add any macOS-specific commands here
 fi 
+
+# Build the docker compose
+docker compose build

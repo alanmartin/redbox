@@ -21,11 +21,14 @@ RUN apt-get update && apt-get install --yes build-essential > /dev/null
 RUN pip install poetry poetry-plugin-bundle==1.3.0
 
 WORKDIR /src
-COPY django_app/ .
+COPY README.md ../.
 COPY redbox-core/ ../redbox-core/
-COPY README.md ../README.md
+COPY django_app/pyproject.toml .
+COPY django_app/poetry.lock .
 
-RUN poetry install
+# do this so that poetry bundle can run without the project - can't pass --no-root to bundle
+#RUN touch README.md
+RUN poetry install --no-root
 RUN poetry bundle venv ./venv
 
 
@@ -36,16 +39,18 @@ RUN apt-get update && apt-get install --yes libpq-dev curl > /dev/null
 
 WORKDIR /usr/src/app
 
+COPY README.md .
+COPY redbox-core/ .
 COPY django_app/ .
-COPY redbox-core/ ../redbox-core/
-COPY README.md ../README.md
 
 COPY --from=npm-packages /src/node_modules/ frontend/node_modules/
 COPY --from=npm-packages /src/dist/ frontend/dist/
 COPY --from=poetry-packages /src/venv ./venv
 
 ENV DJANGO_SETTINGS_MODULE='redbox_app.settings'
-ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app:/usr/src"
+ENV PYTHONPATH "${PYTHONPATH}:/."
+
+ENV PATH="/usr/src/app/venv/bin:${PATH}"
 
 # Install redbox-core in editable mode in the virtual environment and verify installation
 RUN . ./venv/bin/activate && \
@@ -56,7 +61,9 @@ RUN . ./venv/bin/activate && \
     python -c "import sys; print('\n'.join(sys.path))" && \
     echo "=== Directory Structure ===" && \
     ls -la /usr/src/app && \
-    ls -la /usr/src/redbox-core
+    ls -la /usr/src/redbox-core && \
+    echo "=== Testing Import ===" && \
+    python -c "import redbox; print('redbox package imported successfully')"
 
 EXPOSE 8090
 

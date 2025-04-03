@@ -33,6 +33,18 @@
                 "PYTHONPATH": "${workspaceFolder}/redbox-core:${workspaceFolder}/django_app:${workspaceFolder}",
                 "DJANGO_SETTINGS_MODULE": "redbox_app.settings"
             }
+        },
+        {
+            "name": "Run current file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/redbox-core:${workspaceFolder}/django_app:${workspaceFolder}",
+                "DJANGO_SETTINGS_MODULE": "redbox_app.settings"
+            },
+            "justMyCode": true
         }
     ],
     "compounds": [
